@@ -56,7 +56,7 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
+        
     }
 
     /**

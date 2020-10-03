@@ -14,7 +14,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.cart.index');
     }
 
     /**
@@ -47,17 +47,6 @@ class CartController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Cart  $cart
@@ -77,8 +66,6 @@ class CartController extends Controller
      */
     public function update(Request $request, $cart_id)
     {
-        // print_r($request->qty);
-        // print_r($request->price);
         foreach ($request->qty as $cart => $qty) {
            Cart::find($cart)->update([
                'qty' => $qty,
@@ -98,8 +85,17 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cart $cart)
+    public function delete($cart_id)
     {
-        //
+        Cart::find($cart_id)->forceDelete();
+        return back();
     }
+
+
+    public function purchase(Request $request)
+    {
+       dd($request->all());
+    }
+
+
 }

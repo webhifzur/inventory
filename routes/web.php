@@ -16,14 +16,6 @@ use App\Http\Controllers\CartController;
 
 
 
-
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,8 +45,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::resource('purchase', PurchaseController::class);
     Route::resource('sales', SaleController::class);
     Route::resource('cart', CartController::class);
+    Route::get('cart/delete/{cart_id}', [CartController::class , 'delete'])->name('cart.delete');
+    Route::get('cart', [CartController::class , 'index'])->name('cart');
+    // Route::post('purchase', [CartController::class , 'purchase'])->name('purchase.post');
 
 
-
-   
 });

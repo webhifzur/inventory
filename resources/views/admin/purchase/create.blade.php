@@ -32,7 +32,7 @@
                   </div>
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form role="form" action="{{route('cart.store')}}" method="post" enctype="multipart/form-data">
+                  <form role="form" action="{{route('cart.store')}}" method="post">
                      @csrf
                      <div class="card-body">
                         <div class="row">
@@ -100,7 +100,6 @@
                            </table>
                         </div>
                      </form>
-
                         <div class="card-body">
                            <table class="table table-bordered table-striped text-center mb-3">
                                  <thead>
@@ -119,35 +118,34 @@
                                   $sub_total = 0;
                                   @endphp
                                  @foreach($carts as $cart)
-                                 <form action="{{ route('cart.update',$cart->id) }}" method="post">
-                                    @csrf
-                                    @method('PATCH')
-                                    <tr>
-                                       <td>{{ $loop->index +1 }}</td>
-                                       <td class="text-left">{{$cart->vandor_name->product_name}}</td>
-                                       <td>
-                                          <input type="number" name="qty[{{ $cart->id }}]" class="form-control" value="{{ $cart->qty }}">
-                                       </td>
-                                       <td>
-                                          <input type="number" name="price[{{ $cart->id }}]" class="form-control" value="{{ $cart->price }}">
-                                       </td>
-                                       <td>{{ number_format(($cart->qty)*($cart->price) , 2)  }}</td>
-                                       <td>
-                                          <button type="submit" class="btn btn-sm btn-success">
-                                             <i class="fa fa-check-circle" aria-hidden="true"></i>
-                                          </button>
-                                       </td>
-                                       <td>
-                                          <button class="btn btn-danger" type="button" onclick="">
-                                             <i class="fa fa-trash" aria-hidden="true"></i>
-                                          </button>
-                                       </td>
-                                    </tr>
-                                    @php
-                                        $sub_total += (($cart->qty)*($cart->price));
-                                    @endphp
-                                    @endforeach
-                                 </form>
+                        <form name="purchase_forms" action="{{ route('cart.update',$cart->id) }}" method="post">
+                              @csrf
+                              @method('PATCH')
+                                 <tr>
+                                    <td>{{ $loop->index +1 }}</td>
+                                    <td class="text-left">{{$cart->vandor_name->product_name}}</td>
+                                    <td>
+                                       <input type="number" name="qty[{{ $cart->id }}]" class="form-control" value="{{ $cart->qty }}">
+                                    </td>
+                                    <td>
+                                       <input type="number" name="price[{{ $cart->id }}]" class="form-control" value="{{ $cart->price }}">
+                                    </td>
+                                    <td>{{ number_format(($cart->qty)*($cart->price) , 2)  }}</td>
+                                    <td>
+                                       <button type="submit" class="btn btn-sm btn-success">
+                                          <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                       </button>
+                                    </td>
+                                    <td>
+                                       <a href="{{ route('cart.delete',$cart->id) }}" class="btn btn-danger" type="button">
+                                          <i class="fa fa-trash" aria-hidden="true"></i>
+                                       </a>
+                                    </td>
+                                 </tr>
+                                 @php
+                                       $sub_total += (($cart->qty)*($cart->price));
+                                 @endphp
+                                 @endforeach
                               </tbody>
                            </table>   
                    
@@ -171,9 +169,10 @@
                            </td>
                         </tr>
                      </table>
-               </div>
-               
-             
+                  </div>
+                  <button type="button" class="btn btn-sm btn-success" name="purchase_btn" onclick="purchase();">Purchase</button>
+                  </form>
+                  {{-- <a href="{{ route('cart') }}" class="btn btn-primary">Purchase</a> --}}
                <!-- /.card -->
             </div>
             <!--/.col (left) -->
@@ -186,5 +185,9 @@
 </div>
 <!-- /.content-wrapper -->
 @endsection
-@push('js')
-@endpush
+<script>
+   function purchase(){
+      document.forms['purchase_forms'].action="{{ route('purchase.post') }}";
+      document.forms['purchase_forms'].submit();
+   }
+</script>
